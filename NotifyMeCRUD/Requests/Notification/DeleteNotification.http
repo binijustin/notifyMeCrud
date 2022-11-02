@@ -1,0 +1,3 @@
+@id =d8ae6aa3-b517-42f5-94a7-e535d0b6f132
+DELETE https://localhost:7116/notifications/{{id}}
+

@@ -1,0 +1,94 @@
+https://www.youtube.com/watch?v=vftu-pqdUzQ
+https://www.hanselman.com/blog/my-ultimate-powershell-prompt-with-oh-my-posh-and-the-windows-terminal
+
+dotnet new sln -o NotifyMeCRUD
+dotnet new classlib -o NotifyMeCRUD.Contracts
+dotnet new webapi -o NotifyMeCRUD
+
+
+in vscode
+
+more * <sln file> -- you will see that there is no project in soulution file
+-- you will need to add it 
+dotnet sln add NotifyMeCRUD.Contracts NotifyMeCRUD
+-- or simplified version
+dotnet sln add (ls -r **/*.csproj) --add all csproj recursively in dir
+
+
+if put --204 no content or --201 if successful (RFC Spec, is called upsert)
+
+
+
+-- Create Contracts (Request and Response Models)
+
+
+-- Create API
+--to reference presentation layer to contracts
+dotnet add .\NotifyMeCRUD\ reference .\NotifyMeCRUD.Contracts\
+
+
+--Motivation for internal service model for request
+1. Contracts are usually for clients and the reason we create internal service models so that when we have changes in our backend we can just swap out the object without changing the contracts.
+
+--Create Service (Interface)
+Services that will be called by the Controllers
+
+-- Add the Dependency Injections
+
+
+-- Middleware 101 (error handling using ErrorOr)
+add errorOr on presentation layer
+create ServiceErrors Folder and Errors.<Class>.cs -- you will list the errors that you are expecting
+
+sample ServiceErrors.Errors.Notification.cs
+
+--Create ApiController baseclass to create a custom problem implementation (getting list of errors and then digesting it to sent proper code and custom error description)
+##initial problem implementation
+public IActionResult Problem(List<Error> errors)
+    {
+
+        var firstError = errors[0];
+
+        var statusCode = firstError.Type switch
+        {
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+        return Problem(statusCode: statusCode, title: firstError.Description);
+
+    }
+
+
+--Typical flow using ErrorOr
+  //call service
+  var upsertNotificationResult = _notificationService.UpsertNotification(notification);
+
+  //TODO: if not existing return 201
+  return upsertNotificationResult.Match(
+      upsert => upsert.isNewlyCreated ? CreatedAtGetNotification(notification) : NoContent(),
+      errors => Problem(errors)
+  );
+
+--Enforcing Business Rules Internal Service Model for request validation without fluent validation
+Redefining api base controller (apicontroller) to accept multiple errors
+put before ##initial problem implementation var firstError = errors[0];
+        //handle error if all errors are validation
+        if (errors.All(error => error.Type == ErrorType.Validation))
+        {
+            var modelStateDictionary = new ModelStateDictionary();
+            foreach (var error in errors)
+            {
+                modelStateDictionary.AddModelError(error.Code, error.Description);
+            }
+            return ValidationProblem(modelStateDictionary);
+        }
+        //Handle error that are unexpected
+        if (errors.Any(error => error.Type == ErrorType.Unexpected))
+        {
+            return Problem();
+        }
+
+

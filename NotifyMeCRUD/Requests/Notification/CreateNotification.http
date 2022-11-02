@@ -1,0 +1,14 @@
+POST https://localhost:7116/notifications/
+Content-Type: application/json
+
+{
+    "name" : "Dg",
+    "description" : "Dog shave for customer 1",
+    "startDateTime" : "2022-11-02T08:00:00",
+    "endDateTime" : "2022-11-02T08:00:00",
+    "additionalRequest" : ["Bath", "Blowdry"]
+}
+
+###
+
+GET https://localhost:7116/Notifications/8c80a733-2b75-4249-a4af-b475714eea73

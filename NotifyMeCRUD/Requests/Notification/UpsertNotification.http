@@ -1,0 +1,11 @@
+@id=d8ae6aa3-b517-42f5-94a7-e535d0b6f133
+PUT https://localhost:7116/notifications/{{id}}
+Content-Type: application/json
+
+{
+    "name" : "Dog KalboZZ",
+    "description" : "Dog shave for customer 1ZZ",
+    "startDateTime" : "2022-11-02T08:00:00",
+    "endDateTime" : "2022-11-02T08:00:00",
+    "additionalRequest" : ["Bath", "Blowdry"]
+}
