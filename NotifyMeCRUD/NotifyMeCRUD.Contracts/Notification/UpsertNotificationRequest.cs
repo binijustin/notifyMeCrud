@@ -1,9 +1,8 @@
+using NotifyMeCRUD.Contracts.Notification.Common;
+
 namespace NotifyMeCRUD.Contracts.NotifyMe;
 
 public record UpsertNotificationRequest(
-    Guid id,
-    string Name,
-    string Description,
-    DateTime StartDateTime,
-    DateTime EndDateTime,
+    Guid Id,
+    NotificationDetails NotificationDetails,
     List<string> AdditionalRequest);

@@ -1,4 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using NotifyMeCRUD.Common;
+using NotifyMeCRUD.Contracts.NotifyMe;
 using NotifyMeCRUD.Services.Notifications;
+using NotifyMeCRUD.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -8,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddScoped<INotificationService, NotificationService>();
+
+    builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+    builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 }
 
 var app = builder.Build();

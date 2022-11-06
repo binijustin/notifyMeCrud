@@ -3,9 +3,10 @@ PUT https://localhost:7116/notifications/{{id}}
 Content-Type: application/json
 
 {
+    "notificationDetails":{
     "name" : "Dog KalboZZ",
     "description" : "Dog shave for customer 1ZZ",
     "startDateTime" : "2022-11-02T08:00:00",
-    "endDateTime" : "2022-11-02T08:00:00",
+    "endDateTime" : "2022-11-02T08:00:00"},
     "additionalRequest" : ["Bath", "Blowdry"]
 }

@@ -56,19 +56,19 @@ public class Notification
 
      public static ErrorOr<Notification> From(CreateNotificationRequest request)
     {
-        return Create(request.Name,
-             request.Description,
-             request.StartDateTime,
-             request.EndDateTime,
+        return Create(request.NotificationDetails.Name,
+             request.NotificationDetails.Description,
+             request.NotificationDetails.StartDateTime,
+             request.NotificationDetails.EndDateTime,
              request.AdditionalRequest);
     }
 
     public static ErrorOr<Notification> From(Guid id, CreateNotificationRequest request)
     {
-        return Create(request.Name,
-             request.Description,
-             request.StartDateTime,
-             request.EndDateTime,
+        return Create(request.NotificationDetails.Name,
+             request.NotificationDetails.Description,
+             request.NotificationDetails.StartDateTime,
+             request.NotificationDetails.EndDateTime,
              request.AdditionalRequest,
              id);
     }

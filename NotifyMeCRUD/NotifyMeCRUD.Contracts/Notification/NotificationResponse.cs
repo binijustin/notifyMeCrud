@@ -1,7 +1,7 @@
 namespace NotifyMeCRUD.Contracts.NotifyMe;
 
 public record NotificationResponse(
-    Guid id,
+    Guid Id,
     string Name,
     string Description,
     DateTime StartDateTime,
